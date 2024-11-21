@@ -1,0 +1,28 @@
+rm -f cooke_parser
+gcc -std=c99 -Wall -o cooke_parser parser.c front.c
+parser.c: In function 'main':
+parser.c:232:10: error: 'in_fp' undeclared (first use in this function)
+  232 |     if ((in_fp = fopen(argv[1], "r")) == NULL) {
+      |          ^~~~~
+parser.c:232:10: note: each undeclared identifier is reported only once for each function it appears in
+In file included from parser.c:3:
+parser.c: At top level:
+front.h:48:12: warning: 'lookup' declared 'static' but never defined [-Wunused-function]
+   48 | static int lookup(char ch);
+      |            ^~~~~~
+front.h:49:13: warning: 'addChar' declared 'static' but never defined [-Wunused-function]
+   49 | static void addChar();
+      |             ^~~~~~~
+front.h:50:13: warning: 'getChar' used but never defined
+   50 | static void getChar();
+      |             ^~~~~~~
+front.h:51:13: warning: 'getNonBlank' declared 'static' but never defined [-Wunused-function]
+   51 | static void getNonBlank();
+      |             ^~~~~~~~~~~
+front.h:52:14: warning: 'tokenCodeToName' used but never defined
+   52 | static char* tokenCodeToName(int current_code);
+      |              ^~~~~~~~~~~~~~~
+front.c:7:1: warning: "/*" within comment [-Wcomment]
+    7 | /* front.c - a lexical analyzer system for simple arithmetic expressions */
+      |  
+make: *** [Makefile:12: cooke_parser] Error 1
