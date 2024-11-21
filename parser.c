@@ -216,33 +216,3 @@ void cond() {
 static void error() {
     printf("Syntax Error: Unexpected token %s\\n", tokenCodeToName(nextToken));
 }
-
-/**
- * main
- * Driver program for the parser.
- */
-int main(int argc, char *argv[]) {
-    printf("Cooke Parser :: R11723071\\n");
-
-    if (argc != 2) {
-        printf("Usage Error: Expected syntax - cooke_parser <path_to_source_file>\\n");
-        return 2;
-    }
-
-    if ((in_fp = fopen(argv[1], "r")) == NULL) {
-        printf("ERROR - cannot open file %s\\n", argv[1]);
-        return 3;
-    }
-
-    getChar();
-    lex();
-    stmt();
-
-    if (nextToken == EOF) {
-        printf("Syntax Validated\\n");
-        return 0;
-    } else {
-        error();
-        return 1;
-    }
-}
