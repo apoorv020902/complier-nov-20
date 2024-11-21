@@ -29,35 +29,46 @@ void getChar();
 void getNonBlank();
 char* tokenCodeToName(int current_code);
 
-/******************************************************/
-/* main driver */
-int main (int argumentCount, char **argumentValues) 
-{   /*printing my R number for grading purposes*/
+/**
+ * main
+ * Driver program for the Cooke Parser (Project 2).
+ */
+int main(int argc, char *argv[]) {
     printf("Cooke Parser :: R11723071\n");
 
-    /*Error Handling; Making sure only one argument is passes from the command line */
-        if (argumentCount != 2) {
-        printf("Usage Error: Expected syntax - cooke_analyzer <path_to_source_file> \n");
-        return 1;
+    /* Ensure correct usage with command-line arguments */
+    if (argc != 2) {
+        printf("Usage Error: Expected syntax - cooke_parser <path_to_source_file>\n");
+        return 2;
     }
 
-    /* Open the input data file and process its contents */
-    if ((in_fp = fopen(argumentValues[1], "r")) == NULL) {
-        printf("ERROR - cannot open / find %s \n", argumentValues[1]);
-    } else {
-        getChar();
-        do {
-            lex();
-        } while (nextToken != EOF);
+    /* Open the input file */
+    if ((in_fp = fopen(argv[1], "r")) == NULL) {
+        printf("ERROR - cannot open file %s\n", argv[1]);
+        return 3;
     }
-    fclose(in_fp);
-    return 0;
+
+    /* Process the file using the parser */
+    getChar();   // Initialize character reading
+    lex();       // Start lexical analysis
+    stmt();      // Begin parsing
+
+    /* Check for end of file */
+    if (nextToken == EOF) {
+        printf("Syntax Validated\n");
+        fclose(in_fp);
+        return 0;
+    } else {
+        error();
+        fclose(in_fp);
+        return 1;
+    }
 }
 
 /*****************************************************/
 /* lookup - a function to lookup operators and parentheses and return the 
  * token */
-static int lookup(char ch) {
+int lookup(char ch) {
     switch (ch) {
         case '(':
             addChar();
@@ -181,7 +192,7 @@ static int lookup(char ch) {
 
 /*****************************************************/
 /* addChar - a function to add nextChar to lexeme */
-static void addChar() {
+void addChar() {
     if (lexLen <= 98) {
         lexeme[lexLen++] = nextChar;
         lexeme[lexLen] = 0;
@@ -193,7 +204,7 @@ static void addChar() {
 /*****************************************************/
 /* getChar - a function to get the next character of input and determine its 
  * character class */
-static void getChar() {
+void getChar() {
     if ((nextChar = getc(in_fp)) != EOF) {
         if (isalpha(nextChar))
             charClass = LETTER;
@@ -208,12 +219,12 @@ static void getChar() {
 /*****************************************************/
 /* getNonBlank - a function to call getChar until it returns a non-whitespace 
  * character */
-static void getNonBlank() {
+void getNonBlank() {
     while (isspace(nextChar)) getChar();
 }
 
 /*implemented switch case to return token name linked with the passed integer value*/
-static char* tokenCodeToName(int current_code) {
+char* tokenCodeToName(int current_code) {
     switch (current_code) {
         case 0: return "LETTER";
         case 1: return "DIGIT";
