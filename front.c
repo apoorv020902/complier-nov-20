@@ -1,9 +1,10 @@
-/**
+ /*
  * This is a lexical analyzer code in
  *
  * Sebesta, R. W. (2012). Concepts of Programming Languages. 
  * Pearson, 10th edition.
- *
+ */
+
 /* front.c - a lexical analyzer system for simple arithmetic expressions */
 
 #include <stdio.h>
